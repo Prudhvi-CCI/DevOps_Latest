@@ -23,8 +23,8 @@ nvm alias default $(nvm current)
 node -v
 npm -v
 
-# Navigate to your project directory
-cd /var/www/notes/
+# # Navigate to your project directory
+# cd /var/www/notes/
 
-# Start your Node.js application
-npm start
+# # Start your Node.js application
+# npm start

@@ -78,14 +78,15 @@ Vagrant.configure("2") do |config|
   config.vm.define "backend_ubuntu" do |backend_ubuntu|
     backend_ubuntu.vm.box = "alvistack/ubuntu-22.04";
 
-    backend_ubuntu.vm.network "public_network", bridge: "dynamic_backend_bridge", type: "dhcp";
-    
-    backend_ubuntu.vm.network "public_network", bridge: "static_backend_bridge", type: "static", ip: "192.168.8.190";
+    backend_ubuntu.vm.network "private_network", type: 'static', ip: '192.168.17.220';
 
-    config.vm.synced_folder "../notes", "/var/www/notes"
+    config.vm.synced_folder ".", "/var/www"
 
     # Provisions
-    backend_ubuntu.vm.provision "shell", path: "provisioning/initial_install.sh",name: "constructVM";
+    backend_ubuntu.vm.provision "shell", path: "provisioning/node_install.sh",name: "startUpVM";
+    # backend_ubuntu.vm.provision "shell", path: "provisioning/initial_install.sh",name: "constructVM";
+    backend_ubuntu.vm.provision "shell", path: "provisioning/remove_systemD.sh", name: "removal_existing_Dfile";
+    backend_ubuntu.vm.provision "shell", path: "provisioning/backend_run.sh", name: "backend_startup";
   end 
 
 end
