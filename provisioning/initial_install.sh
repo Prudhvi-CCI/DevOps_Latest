@@ -24,7 +24,8 @@ sudo -u postgres psql -d notes_database -c "CREATE TABLE notes (
 );"
 
 # Configure PostgreSQL to listen on all IP addresses
-echo "host notes_database postgres 192.168.0.106/32 scram-sha-256" | sudo tee -a /etc/postgresql/$(ls /etc/postgresql)/main/pg_hba.conf
+echo "host notes_database postgres 192.168.17.220/32 scram-sha-256" | sudo tee -a /etc/postgresql/$(ls /etc/postgresql)/main/pg_hba.conf
+echo "host notes_database postgres 192.168.4.1/32 scram-sha-256" | sudo tee -a /etc/postgresql/$(ls /etc/postgresql)/main/pg_hba.conf
 echo "listen_addresses = '*'" | sudo tee -a /etc/postgresql/$(ls /etc/postgresql)/main/postgresql.conf
 
 # Allow external access to the 'notes_database' database from another VM

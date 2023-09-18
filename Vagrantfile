@@ -78,9 +78,9 @@ Vagrant.configure("2") do |config|
   config.vm.define "postgres_ubuntu" do |postgres_ubuntu|
     postgres_ubuntu.vm.box = "alvistack/ubuntu-22.04";
 
-    postgres_ubuntu.vm.network "public_network", bridge: "dynamic_postgres_bridge", type: "dhcp";
-  
-    postgres_ubuntu.vm.network "public_network", bridge: "static_postgres_bridge", type: "static", ip: "192.168.7.230";
+    postgres_ubuntu.vm.network "private_network", type: "static", ip: "192.168.4.252";
+
+    # postgres_ubuntu.vm.network "public_network", bridge: "dynamic_postgres_bridge", type: "dhcp";
 
     # config.vm.network "forwarded_port", guest: 3000, host: 8050, host_ip: "127.0.0.1"
 
