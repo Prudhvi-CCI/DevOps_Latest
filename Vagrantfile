@@ -78,14 +78,16 @@ Vagrant.configure("2") do |config|
   config.vm.define "frontend_ubuntu" do |frontend_ubuntu|
     frontend_ubuntu.vm.box = "alvistack/ubuntu-22.04"
 
-    frontend_ubuntu.vm.network "public_network"
+    frontend_ubuntu.vm.network "private_network", type: "static", ip:"192.168.2.254"
 
     config.vm.network "forwarded_port", guest: 3000, host: 8050, host_ip: "127.0.0.1"
 
     config.vm.synced_folder ".", "/var/www/"
 
     # Provisions
-    frontend_ubuntu.vm.provision "shell", path: "provisioning/initial_install.sh",name: "constructVM";
+    # frontend_ubuntu.vm.provision "shell", path: "provisioning/initial_install.sh",name: "constructVM";
+    frontend_ubuntu.vm.provision "shell", path: "provisioning/node_install.sh",name: "constructVM";
+    frontend_ubuntu.vm.provision "shell", path: "provisioning/frontend_run.sh",name: "frontendVM";
   end 
 
 end

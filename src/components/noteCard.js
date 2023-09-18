@@ -1,5 +1,5 @@
 import "../App.css";
-
+import config from "../config/config";
 import axios from "axios";
 
 function NoteCard(props) {
@@ -8,11 +8,12 @@ function NoteCard(props) {
     //STEP - 4 (Deleting the data from the backend)
     try {
       await axios.delete(
-        `http://192.168.0.106:3001/note/${parseInt(props.id)}`,
+        `http://${config.backendBaseUrl}/${parseInt(props.id)}`,
         (response) => {
           console.log(response.data);
         }
       );
+      props.updateBody(!props.currentBody)
     } catch (err) {
       console.log(err);
     }
@@ -26,7 +27,7 @@ function NoteCard(props) {
     <div className="newNotes">
       <div>
         <h3>{props.title}</h3>
-        <p>{props.description}</p>
+        <p data-testid="test-desc">{props.description}</p>
         <button onClick={handleOpenModal}>Edit</button>
         <button onClick={handleDelete}>Delete</button>
       </div>

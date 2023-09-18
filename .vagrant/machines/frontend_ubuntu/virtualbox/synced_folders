@@ -1,1 +1,1 @@
-{"virtualbox":{"/var/www/":{"guestpath":"/var/www","hostpath":"C:/Users/SPURGE/OneDrive/Desktop/Cognitive_Clouds/DevOps/MiniProject/PERN MINI PROJECT/FrontEnd_code","disabled":false,"__vagrantfile":true}}}
+{"virtualbox":{"/var/www/":{"guestpath":"/var/www","hostpath":"C:/Users/SPURGE/OneDrive/Desktop/Cognitive_Clouds/DevOps/MiniProject/VM_Machines/FrontEnd_code","disabled":false,"__vagrantfile":true}}}

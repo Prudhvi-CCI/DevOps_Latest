@@ -1,10 +1,10 @@
 import "../App.css";
 
-import React, { useState, useEffect } from "react";
-
+import React, { useState } from "react";
+import config from "../config/config";
 import axios from "axios";
 
-function Notes() {
+function Notes(props) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [password, setPassword] = useState("");
@@ -28,22 +28,20 @@ function Notes() {
     // Passing To BackEnd
     // STEP - 1
     console.log("reached...");
+
     let date = new Date();
 
-    // const note = ;
-
-    // console.log(note);
-
     try {
-      await axios.post("http://192.168.0.106:3001/note", {
+      await axios.post(`http://${config.backendBaseUrl}`, {
           title: title,
           description: description,
           password: password,
           date: date.toLocaleDateString() + " " + date.toLocaleTimeString(),
-      });
+      })
       setTitle('');
       setDescription('');
-      setPassword('');
+      setPassword('');   
+      props.updateBody(!props.currentBody);        
     } catch (err) {
       console.log(err);
     }
