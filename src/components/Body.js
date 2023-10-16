@@ -26,39 +26,38 @@ function Body() {
   useEffect(() => {
     //Database Code
     //STEP - 2 (Fetching the data from backend)
-    // const fetchData = async()=>{
-      // try {
-      //   const response = await axios.get("http://192.168.17.220:3001/note");
-      //   setNotes(response.data);
-      // } catch (err) {
-      //   console.error(err);
-      // }
+    const fetchData = async()=>{
+      try {
+        const response = await axios.get(`http://${config.backendBaseUrl}`);
+        setNotes(response?.data!=null?response.data:null);
+      } catch (err) {
+        console.log(err,"yesss...");
+      }
+    }
       
       // try {
       //   await axios
-      //     .get("http://192.168.17.220:3001/note")
+      //     .get(`http://${config.backendBaseUrl}`)
       //     .then((response) => setNotes(response.data));
       // } catch (err) {
       //   console.log(err);
       // }
-    // }
 
-    console.log('reached body useEffect...')
+    
+    // try {
+    //   const response = await axios.get(`http://${config.backendBaseUrl}`);
+    //   setNotes(response.data);
+    //   // axios
+    //   // .get(`http://${config.backendBaseUrl}`)
+    //   // .then((response) => {
+    //   //     setNotes(response.data)
+    //   //   }); 
+    //   } catch (err) {
+    //     console.log(err);
+    //   }
 
-    try {
-      axios
-        .get(`http://${config.backendBaseUrl}`)
-        .then((response) => {
-          console.log(response.data,"From get api 47 line")
-          setNotes(response.data)
-        });
-      
-    } catch (err) {
-      console.log(err);
-    }
-
-    // fetchData()
-  },[renderBody]); // Responsive result remove dependency array and check...
+      fetchData()
+    },[renderBody]); // Responsive result remove dependency array and check...
 
   //This function(setModal) is passed as props to child component and based on the click
   //in the child component we are changing its value to true in noteCard component
@@ -68,6 +67,10 @@ function Body() {
     setModalCheck(isTrue);
     setEditIndex(editNoteIndex);
   };
+
+  const updateBody = (updatedData)=>{
+    setRenderBody(updatedData);
+  }
 
   const handleClose = () => {
     setModalCheck(false);
@@ -90,6 +93,7 @@ function Body() {
         title: newTitle,
         description: newDescription,
       });
+      setRenderBody(!renderBody);
     } catch (err) {
       console.log(err);
     }
@@ -105,13 +109,13 @@ function Body() {
       <div className="notesBox">
         {notes.map((note) => (
           <NewNotes
-            id={note.id}
+            key={note.id}
             title={note.title}
             description={note.description}
             date={note.date}
             setModal={setModal}
             currentBody={renderBody}
-            updateBody={setRenderBody}
+            updateBody={updateBody}
           />
         ))}
       </div>

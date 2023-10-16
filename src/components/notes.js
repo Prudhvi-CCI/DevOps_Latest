@@ -27,8 +27,7 @@ function Notes(props) {
   const handleAddNote = async () => {
     // Passing To BackEnd
     // STEP - 1
-    console.log("reached...");
-
+    
     let date = new Date();
 
     try {
@@ -55,6 +54,7 @@ function Notes(props) {
           type="text"
           onChange={handleTitleChange}
           placeholder="Enter title.."
+          data-testid="title-input"
           value={title}
         />
         <textarea
@@ -63,6 +63,7 @@ function Notes(props) {
           onChange={handleDescriptionChange}
           rows="7"
           cols="40"
+          data-testid="description-input"
           value={description}
         ></textarea>
         <input
@@ -70,6 +71,7 @@ function Notes(props) {
           type="text"
           onChange={handlePasswordChange}
           placeholder="Enter password.."
+          data-testid="password-input"
           value={password}
         />
         <button id="addNote" onClick={handleAddNote}>

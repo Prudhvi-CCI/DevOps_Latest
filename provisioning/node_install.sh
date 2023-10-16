@@ -13,3 +13,5 @@ echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.co
 sudo apt-get update
 
 sudo apt-get install nodejs -y
+
+npm install --save-dev jest @testing-library/react @testing-library/jest-dom

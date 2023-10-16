@@ -85,8 +85,8 @@ Vagrant.configure("2") do |config|
     config.vm.synced_folder ".", "/var/www/"
 
     # Provisions
-    # frontend_ubuntu.vm.provision "shell", path: "provisioning/initial_install.sh",name: "constructVM";
     frontend_ubuntu.vm.provision "shell", path: "provisioning/node_install.sh",name: "constructVM";
+    # frontend_ubuntu.vm.provision "shell", path: "provisioning/remove_systemD.sh", name: "removal_existing_Dfile";
     frontend_ubuntu.vm.provision "shell", path: "provisioning/frontend_run.sh",name: "frontendVM";
   end 
 

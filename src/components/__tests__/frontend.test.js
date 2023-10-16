@@ -3,49 +3,86 @@ import Body from '../Body';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import NewNotes from "../noteCard";
+import config from "../../config/config";
 
 const mock = new MockAdapter(axios);
 
 // Mock Axios API calls
 jest.mock('axios');
 
-mock.onGet("http://192.168.17.220:3001/note").reply(200, { 
-  data: {
+// Define a mock response data
+const mockData = [
+  {
     id: 1,
-    title: "mockTitle",
-    description: 'mockDescription',
+    title: "mockTitle_1",
+    description: 'mockDescription_1',
     date: '18-02-2023'
-  } 
+  },
+  {
+    id: 2,
+    title: "mockTitle_2",
+    description: 'mockDescription_2',
+    date: '18-02-2023'
+  },
+  {
+    id: 3,
+    title: "mockTitle_3",
+    description: 'mockDescription_3',
+    date: '18-02-2023'
+  },
+  {
+    id: 1,
+    title: "mockTitle_4",
+    description: 'mockDescription_4',
+    date: '18-02-2023'
+  }
+];
+
+test('Check data is fetched properly in useEffect with axios-mock-adapter', async () => {
+
+  // Mock the Axios request
+  mock.onGet(`http://${config.backendBaseUrl}`).reply(200, mockData);
+
+  axios.get.mockResolvedValue({ data: mockData });
+
+  render(<Body />);
+
+  // Wait for the asynchronous code to resolve (adjust the wait time as needed)
+  await act(() => {
+    // Check that Axios made the request with the correct URL
+    expect(axios.get).toHaveBeenCalledWith(`http://${config.backendBaseUrl}`);
+  });
+
+  // Restore the original axios behavior
+  mock.restore();
 });
 
 test('renders data fetched from API', async () => {
   // Mock the Axios response for the GET request
- await axios.get.mockResolvedValue({ 
-    data: {
-      data: {
-        id: 1,
-        title: "mockTitle",
-        description: 'mockDescription',
-        date: '18-02-2023'
+    await axios.get.mockResolvedValue({ 
+        data: {
+          data: {
+            id: 1,
+            title: "mockTitle",
+            description: 'mockDescription',
+            date: '18-02-2023'
+          }
       }
-  }
-});
+    });
 
-  render(<Body />);
+    render(<Body />);
 
-//   // Wait for data to be fetched
+    //   // Wait for data to be fetched
 //   // await waitFor(() => {
 //   //   expect(screen.getAllByText('mockDescription')).toBeInTheDocument();
 //   // });
-});
+})
+
 
 test('renders mockDescription in NewNotes', () => {
-  const mockDescription = 'mockDescription'; // Replace with your actual value
 
   // Render the NewNotes component with the mockDescription prop
   render(<NewNotes id={1} title={'mockTitle'} description={'mockDescription'} date={'18-02-2023'}/>);
-
-  // const paragraphElement = getByTestId('test-desc');
 
   // Use getByText to search for the text content in the rendered component
   expect(screen.getAllByTestId('test-desc').textContent).toBe(undefined);
@@ -58,9 +95,10 @@ test('it should perform a edit button click', async() => {
   const { getByText } = render(<NewNotes setModal={mockSetModal}/>);
   const button = getByText('Edit'); // Replace with the text on your button
 
-  fireEvent.click(button);
-
-  expect(mockSetModal).toHaveBeenCalled()
+  await act(async()=>{
+    fireEvent.click(button);
+    expect(mockSetModal).toHaveBeenCalled()
+  })
 });
 
 test('it should perform a delete button click', async() => {
@@ -80,79 +118,4 @@ test('Rendering the notes of the notepad',()=>{
 test('First Test',()=>{
     //In Testing Hello World 
     expect(true).toBe(true)  
-})  
-
-
-
-// const mockAxios = new MockAdapter(axios);
-
-// Your test suite
-// describe('Body', () => {
-//   it('fetches data from the backend and sets it in state', async () => {
-//     // Mock the Axios request
-//     mockAxios.onGet('http://192.168.0.106:3001/note').reply(200, [{ id: 1, title: 'javascript', description: 'javascript is an most loved programming language' }]);
-
-//     // Render the component
-//     let getByText;
-//     await act(async () => {
-//       const { getByText: getByTextFunc } = render(<Body />);
-//       getByText = getByTextFunc;
-//     });
-
-//     // You can now make assertions based on the component's behavior
-//     const titleCheck = screen.getByText('javascript');
-//     expect(titleCheck).toBeTruthy();
-
-//     const descriptionCheck = screen.getByText('javascript is an most loved programming language');
-//     expect(descriptionCheck.tagName).toBe('P');
-//   });
-// });
-
-// describe('handleModify function', () => {
-//     let axiosMock;
-  
-//     beforeEach(() => {
-//       axiosMock = new MockAdapter(axios);
-//     });
-  
-//     afterEach(() => {
-//       axiosMock.restore();
-//     });
-  
-//     // it('should make an Axios PATCH request and call handleClose', async () => {
-//     //   const editIndex = 123;
-//     //   const newTitle = 'New Title';
-//     //   const newDescription = 'New Description';
-//     //   const handleClose = jest.fn();
-  
-//     //   axiosMock.onPatch(`http://192.168.0.11:3001/note/${editIndex}`).reply(200, {}); // Mock a successful response
-  
-//     // //   await handleModify(editIndex, newTitle, newDescription, handleClose);
-  
-//     //   // Assert that the Axios request was made with the correct URL and data
-  
-//     //   // Assert that handleClose was called
-//     //   expect(handleClose).toHaveBeenCalledTimes(0);
-//     // });
-  
-//     // it('should handle Axios error and call handleClose', async () => {
-//     //   const editIndex = 123;
-//     //   const newTitle = 'New Title';
-//     //   const newDescription = 'New Description';
-//     //   const handleClose = jest.fn();
-  
-//     //   axiosMock.onPatch(`http://192.168.0.11:3001/note/${editIndex}`).reply(500); // Mock an error response
-  
-//     // //      await handleModify(editIndex, newTitle, newDescription, handleClose);
-  
-//     //   // Assert that the Axios request was made with the correct URL and data
-//     //   // expect(axiosMock).toBe(`http://192.168.0.106:3001/note/${editIndex}`);
-//     //   // expect(JSON.parse(axiosMock.history.patch[0].data)).toEqual({
-//     //   //   title: newTitle,
-//     //   //   description: newDescription,
-//     //   // });
-  
-//     //   // Assert that handleClose was called
-//     //   expect(handleClose).toHaveBeenCalledTimes(0);
-//     // });
-//   });
+})

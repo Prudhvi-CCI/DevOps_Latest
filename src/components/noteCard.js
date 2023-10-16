@@ -2,32 +2,35 @@ import "../App.css";
 import config from "../config/config";
 import axios from "axios";
 
-function NoteCard(props) {
+function NoteCard({key,title,description,data,setModal,currentBody,updateBody}) {
+
   const handleDelete = async () => {
     //Database Code
     //STEP - 4 (Deleting the data from the backend)
     try {
       await axios.delete(
-        `http://${config.backendBaseUrl}/${parseInt(props.id)}`,
+        `http://${config.backendBaseUrl}/${parseInt(key)}`,
         (response) => {
           console.log(response.data);
         }
       );
-      props.updateBody(!props.currentBody)
+      updateBody((prevState)=>{
+        prevState = !prevState;
+      })
     } catch (err) {
       console.log(err);
     }
   };
 
   const handleOpenModal = () => {
-    props.setModal(true, props.id); //This is parent component function passed as props.
+    setModal(true, key); //This is parent component function passed as props.
   };
 
   return (
     <div className="newNotes">
       <div>
-        <h3>{props.title}</h3>
-        <p data-testid="test-desc">{props.description}</p>
+        <h3>{title}</h3>
+        <p data-testid="test-desc">{description}</p>
         <button onClick={handleOpenModal}>Edit</button>
         <button onClick={handleDelete}>Delete</button>
       </div>
