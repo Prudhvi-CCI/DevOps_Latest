@@ -81,84 +81,110 @@ describe('NoteService', () => {
 
   // Add similar test cases for other methods like findOne, update, and remove
 
-  // describe('findOne',()=>{
-  //   it('should find an return a note based on id', async()=>{
-  //     const note:Note = {
-  //       id: 1,
-  //       title: 'Note 1',
-  //       description: 'Description 1',
-  //       password: 'password1',
-  //       date: '14-09-2023',
-  //     }
-  
-  //     jest.spyOn(noteRepository, 'findOne').mockResolvedValue(note);
+  describe('findOne',()=>{
+    it('should find an return a note based on id', async()=>{
+      jest.spyOn(noteRepository, 'findOneBy').mockResolvedValue({
+        id: 1,
+        title: 'Sample Note',
+        description: 'This is a sample note',
+        password: 'password123',
+        date: '15-09-2023',
+      });
 
-  //     const result = await noteService.findOne(1)
+      const result = await noteService.findOne({ id: 1 });
 
-  //     expect(result).toEqual(note)
-  //   })
-  // })
+      expect(result).toEqual({
+        id: 1,
+        title: 'Sample Note',
+        description: 'This is a sample note',
+        password: 'password123',
+        date: '15-09-2023',
+      });
+    })
+  })
 
   // Test case for update method
-  // describe('update', () => {
-  //   it('should update a note', async () => {
-  //     const updatedNoteData = {
-  //       title: 'Updated Title',
-  //       description: 'Updated Description',
-  //     };
+  describe('update', () => {
+    it('should update a note', async () => {
+      const updatedNoteData = {
+        title: 'Updated Title',
+        description: 'Updated Description',
+      };
 
-  //     const updatedNote: Note = {
-  //       id: 1,
-  //       title: updatedNoteData.title,
-  //       description: updatedNoteData.description,
-  //       password: 'password123',
-  //       date: '14-09-2023',
-  //     };
+      const updatedNote: Note = {
+        id: 1,
+        title: updatedNoteData.title,
+        description: updatedNoteData.description,
+        password: 'password123',
+        date: '14-09-2023',
+      };
 
-  //     jest.spyOn(noteRepository, 'update').mockResolvedValue({ affected: 1 });
-  //     jest.spyOn(noteRepository, 'findOne').mockResolvedValue(updatedNote);
+      const updateResult = {
+        raw: [], 
+        affected: 1,
+        generatedMaps: [],
+      };
 
-  //     const result = await noteService.update(1, updatedNoteData);
+      jest.spyOn(noteRepository, 'update').mockResolvedValue(updateResult);
+      jest.spyOn(noteRepository, 'findOne').mockResolvedValue(updatedNote);
 
-  //     expect(result).toEqual(updatedNote);
-  //   });
+      const result = await noteService.update(1, updatedNoteData);
 
-  //   it('should return null if note is not found for update', async () => {
-  //     const updatedNoteData = {
-  //       title: 'Updated Title',
-  //       description: 'Updated Description',
-  //     };
+      expect(result).toEqual(updateResult);
+    });
 
-  //     jest.spyOn(noteRepository, 'update').mockResolvedValue({ affected: 0 });
+    it('should return null if note is not found for update', async () => {
+      const updatedNoteData = {
+        title: 'Updated Title',
+        description: 'Updated Description',
+      };
 
-  //     const result = await noteService.update(1, updatedNoteData);
+      const updateResult = {
+        raw: [], 
+        affected: 0,
+        generatedMaps: [],
+      };
 
-  //     expect(result).toBeNull();
-  //   });
-  // });
+      jest.spyOn(noteRepository, 'update').mockResolvedValue(updateResult);
 
-  // // Test case for remove method
-  // describe('remove', () => {
-  //   it('should remove a note by id', async () => {
-  //     const noteIdToRemove = 1;
+      const result = await noteService.update(1, updatedNoteData);
 
-  //     jest.spyOn(noteRepository, 'delete').mockResolvedValue({ affected: 1 });
+      expect(result).toBe(updateResult);
+    });
+  });
 
-  //     const result = await noteService.remove(noteIdToRemove);
+  // Test case for remove method
+  describe('remove', () => {
+    it('should remove a note by id', async () => {
+      const noteIdToRemove = 1;
 
-  //     expect(result).toBe(true); // Assuming your remove method returns a boolean or a similar indicator
-  //   });
+      const deleteResult = {
+        raw: [], 
+        affected: 1,
+      };
 
-  //   it('should return false if note is not found for removal', async () => {
-  //     const noteIdToRemove = 1;
+      jest.spyOn(noteRepository, 'delete').mockResolvedValue(deleteResult);
 
-  //     jest.spyOn(noteRepository, 'delete').mockResolvedValue({ affected: 0 });
+      const result = await noteService.remove(noteIdToRemove);
 
-  //     const result = await noteService.remove(noteIdToRemove);
+      expect(result).toBe(deleteResult); // Assuming your remove method returns a boolean or a similar indicator
+    });
 
-  //     expect(result).toBe(false); // Assuming your remove method returns a boolean or a similar indicator
-  //   });
-  // });
+    it('should return false if note is not found for removal', async () => {
+      const noteIdToRemove = 1;
+
+      const deleteResult = {
+        raw: [], 
+        affected: 0,
+      };
+
+      jest.spyOn(noteRepository, 'delete').mockResolvedValue(deleteResult);
+
+      const result = await noteService.remove(noteIdToRemove);
+
+      expect(result).toBe(deleteResult);
+    });
+  });
   
 });
 
